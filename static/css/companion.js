@@ -10,6 +10,8 @@ const clearChatButton = document.querySelector('#clear-chat');
 const dailyQuestion = document.querySelector('#daily-question');
 const dailyQuestionButton = document.querySelector('#daily-question-button');
 const chatStorageKey = 'mero-cycle-companion-chat';
+const historyStorageKey = 'mero-cycle-companion-history';
+const historyList = document.querySelector('#chat-history-list');
 const firstName = document.body.dataset.userName || 'friend';
 const dayNumber = Math.floor(Date.now() / 86400000);
 const dailyQuestions = [
@@ -72,14 +74,54 @@ function saveChat() {
     localStorage.setItem(chatStorageKey, JSON.stringify([...chatMessages.children].map((message) => ({ text: message.textContent, sender: message.className.split(' ')[1] }))));
 }
 
+function currentMessages() {
+    return [...chatMessages.children].map((message) => ({ text: message.textContent, sender: message.className.split(' ')[1] }));
+}
+
+function archiveCurrentChat(messages = currentMessages()) {
+    if (messages.length < 2) return;
+    const firstPersonMessage = messages.find((message) => message.sender === 'person');
+    const history = JSON.parse(localStorage.getItem(historyStorageKey) || '[]');
+    history.unshift({ id: Date.now(), title: firstPersonMessage ? firstPersonMessage.text : 'Daily check-in', messages, date: new Date().toLocaleDateString() });
+    localStorage.setItem(historyStorageKey, JSON.stringify(history.slice(0, 12)));
+}
+
+function renderHistory() {
+    const history = JSON.parse(localStorage.getItem(historyStorageKey) || '[]');
+    historyList.replaceChildren();
+    if (!history.length) {
+        const empty = document.createElement('small');
+        empty.textContent = 'No saved chats yet';
+        historyList.appendChild(empty);
+        return;
+    }
+    history.forEach((chat) => {
+        const button = document.createElement('button');
+        button.className = 'history-item';
+        button.type = 'button';
+        button.textContent = chat.title;
+        button.title = `${chat.title} · ${chat.date}`;
+        button.addEventListener('click', () => {
+            chatMessages.replaceChildren();
+            chat.messages.forEach((message) => addMessage(message.text, message.sender));
+            chatInput.focus();
+        });
+        historyList.appendChild(button);
+    });
+}
+
 const savedMessages = JSON.parse(localStorage.getItem(chatStorageKey) || '[]');
-if (savedMessages.length) savedMessages.forEach((message) => addMessage(message.text, message.sender));
-else addMessage(`Hi ${firstName}! I am here for your daily check-in. ${todaysQuestion}`, 'companion');
+archiveCurrentChat(savedMessages);
+localStorage.removeItem(chatStorageKey);
+addMessage(`Hi ${firstName}! I am here for your daily check-in. ${todaysQuestion}`, 'companion');
+renderHistory();
 
 function startNewChat() {
+    archiveCurrentChat();
     chatMessages.replaceChildren();
     localStorage.removeItem(chatStorageKey);
     addMessage(`Hi ${firstName}! What would you like to talk about today?`, 'companion');
+    renderHistory();
     chatInput.focus();
 }
 
