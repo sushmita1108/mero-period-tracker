@@ -16,7 +16,7 @@
                 <a class="nav-item active" href="{{ url_for('calendar') }}"><span class="nav-icon">□</span>Calendar</a>
                 <a class="nav-item" href="{{ url_for('insights') }}"><span class="nav-icon">◒</span>Insights</a>
             </nav>
-            <div class="sidebar-bottom"><div class="privacy-note"><span class="lock-icon">⌑</span><span><strong>Your data is yours</strong><small>Stored privately on this device</small></span></div><a class="profile-button standalone-profile" href="{{ url_for('dashboard') }}"><span class="avatar">{{ user.get('full_name', 'AM')[:2].upper() }}</span><span><strong>{{ user.get('full_name', 'My profile') }}</strong><small>Back to overview</small></span></a></div>
+            <div class="sidebar-bottom"><div class="privacy-note"><span class="lock-icon">⌑</span><span><strong>Your data is yours</strong><small>Stored privately on this device</small></span></div><a class="profile-button standalone-profile" href="{{ url_for('profile') }}"><span class="avatar">{{ user.get('full_name', 'AM')[:2].upper() }}</span><span><strong>{{ user.get('full_name', 'My profile') }}</strong><small>Open my profile</small></span></a></div>
         </aside>
         <main class="main-content" id="top">
             <header class="topbar"><div><p class="eyebrow">Mero Cycle · Your monthly view</p><h1>{{ user.get('full_name', 'Friend').split(' ')[0] }}'s calendar <span class="wave">✦</span></h1><p class="topbar-slogan">Every day is part of your story.</p></div><a class="secondary-button standalone-back" href="{{ url_for('dashboard') }}">← Overview</a></header>

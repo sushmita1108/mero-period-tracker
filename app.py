@@ -144,6 +144,42 @@ def insights():
     return render_template("insights.html", user=session["user"])
 
 
+@app.route("/profile", methods=["GET", "POST"])
+def profile():
+    if not session.get("user"):
+        return redirect(url_for("login"))
+
+    error = None
+    user = session["user"]
+    if request.method == "POST":
+        full_name = " ".join(request.form.get("full_name", "").split())
+        country_code = request.form.get("country_code", "").strip()
+        phone = request.form.get("phone", "").strip()
+        dob = request.form.get("dob", "").strip()
+        phone_digits = re.sub(r"\D", "", phone)
+
+        try:
+            birth_date = datetime.strptime(dob, "%Y-%m-%d").date()
+        except ValueError:
+            birth_date = None
+
+        if not re.fullmatch(r"[A-Za-z][A-Za-z' -]{1,79}", full_name):
+            error = "Enter your full name."
+        elif country_code not in COUNTRY_CODES:
+            error = "Choose your country code."
+        elif not re.fullmatch(r"[0-9\s().-]{7,20}", phone) or not 7 <= len(phone_digits) <= 15:
+            error = "Enter a valid phone number."
+        elif not birth_date or birth_date > date.today() or (date.today() - birth_date).days // 365 < 13:
+            error = "Enter a valid date of birth for someone aged 13 or older."
+        else:
+            updated_user = {"full_name": full_name, "country_code": country_code, "phone": phone_digits, "dob": dob}
+            session["registered_user"] = updated_user
+            session["user"] = updated_user
+            return redirect(url_for("profile", saved="1"))
+
+    return render_template("profile.html", user=user, error=error, saved=request.args.get("saved") == "1", country_options=COUNTRY_OPTIONS)
+
+
 @app.route("/logout")
 def logout():
     session.pop("user", None)

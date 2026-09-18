@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My profile | Mero Cycle</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="login-page profile-page">
+    <main class="profile-shell">
+        <section class="profile-welcome">
+            <a class="brand login-brand" href="{{ url_for('dashboard') }}" aria-label="Mero Cycle home"><span class="brand-mark">✦</span><span>mero cycle<span class="brand-dot">.</span></span></a>
+            <div class="profile-welcome-copy"><p class="eyebrow">Your little corner</p><h1>Make it feel<br><em>like you.</em></h1><p>Keep your details fresh so Mero Cycle can greet you by name and keep your private space feeling personal.</p></div>
+            <div class="profile-sticker" aria-hidden="true">💖</div>
+        </section>
+        <section class="profile-card" aria-labelledby="profile-heading">
+            <a class="back-link" href="{{ url_for('dashboard') }}">← Back to dashboard</a>
+            <p class="eyebrow">My profile</p>
+            <h2 id="profile-heading">Your details</h2>
+            <p class="profile-subtitle">Update anything that has changed. Your information stays private on this device.</p>
+            {% if saved %}<div class="form-success" role="status">Your profile was updated.</div>{% endif %}
+            {% if error %}<div class="form-error" role="alert">{{ error }}</div>{% endif %}
+            <form method="post" action="{{ url_for('profile') }}" class="login-form">
+                <label for="full_name">Full name</label>
+                <div class="name-field"><input id="full_name" name="full_name" type="text" autocomplete="name" value="{{ user.get('full_name', '') }}" required></div>
+                <label for="phone">Phone number</label>
+                <div class="phone-field"><select id="country_code" name="country_code" aria-label="Country code" required>{% for flag, country, code in country_options %}<option value="{{ code }}" {% if user.get('country_code', '+1') == code %}selected{% endif %}>{{ flag }} {{ country }} {{ code }}</option>{% endfor %}</select><input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" value="{{ user.get('phone', '') }}" required></div>
+                <label for="dob">Date of birth</label>
+                <div class="date-field"><input id="dob" name="dob" type="date" autocomplete="bday" value="{{ user.get('dob', '') }}" required></div>
+                <button class="login-button" type="submit">Save profile <span>→</span></button>
+            </form>
+            <a class="logout-link" href="{{ url_for('logout') }}">Log out of Mero Cycle</a>
+        </section>
+    </main>
+</body>
+</html>

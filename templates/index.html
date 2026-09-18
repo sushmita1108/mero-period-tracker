@@ -18,7 +18,7 @@
             </nav>
             <div class="sidebar-bottom">
                 <div class="privacy-note"><span class="lock-icon">⌑</span><span><strong>Your data is yours</strong><small>Stored privately on this device</small></span></div>
-                <button class="profile-button" type="button"><span class="avatar">{{ user.get('full_name', 'AM')[:2].upper() }}</span><span><strong>{{ user.get('full_name', 'Amelia Morgan') }}</strong><small>My profile</small></span><span class="chevron">›</span></button>
+                <a class="profile-button" href="{{ url_for('profile') }}"><span class="avatar">{{ user.get('full_name', 'AM')[:2].upper() }}</span><span><strong>{{ user.get('full_name', 'Amelia Morgan') }}</strong><small>Open my profile</small></span><span class="chevron">›</span></a>
             </div>
         </aside>
 
