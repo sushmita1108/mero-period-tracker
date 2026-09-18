@@ -22,7 +22,9 @@
             {% if error %}<div class="form-error" role="alert">{{ error }}</div>{% endif %}
             <div class="profile-picture-block"><div class="profile-picture-frame"><span class="avatar avatar-fallback profile-large-fallback">{{ user.get('full_name', 'AM')[:2].upper() }}</span><img class="profile-photo-preview" id="profile-photo-preview" alt="Your profile picture" hidden></div><div><strong>Profile picture</strong><small>Choose a cheerful photo from your device.</small><label class="picture-button" for="profile-photo">Choose picture</label><input id="profile-photo" type="file" accept="image/png,image/jpeg,image/webp" hidden></div></div>
             <div class="profile-detail-summary"><span><small>Full name</small><strong>{{ user.get('full_name', '') }}</strong></span><span><small>Age</small><strong>{{ age }} years</strong></span><span><small>Account</small><strong>Private</strong></span></div>
-            <form method="post" action="{{ url_for('profile') }}" class="login-form">
+            <a class="edit-profile-button" href="#edit-profile">✎ Edit profile details</a>
+            <div class="edit-profile-heading" id="edit-profile"><p class="eyebrow">Make an update</p><h3>Edit your profile</h3><p>Change your details below, then press Save profile.</p></div>
+            <form method="post" action="{{ url_for('profile') }}" class="login-form" id="profile-form">
                 <label for="full_name">Full name</label>
                 <div class="name-field"><input id="full_name" name="full_name" type="text" autocomplete="name" value="{{ user.get('full_name', '') }}" required></div>
                 <label for="phone">Phone number</label>
