@@ -1,12 +1,13 @@
 import re
 import json
+import os
 from datetime import date, datetime
 from pathlib import Path
 
 from flask import Flask, redirect, render_template, request, session, url_for
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "cycle-development-key"
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "cycle-development-key")
 ACCOUNTS_FILE = Path(__file__).with_name("data") / "accounts.json"
 COUNTRY_OPTIONS = [
     ("🇦🇫", "Afghanistan", "+93"), ("🇦🇱", "Albania", "+355"), ("🇩🇿", "Algeria", "+213"), ("🇦🇩", "Andorra", "+376"), ("🇦🇴", "Angola", "+244"),
