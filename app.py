@@ -177,7 +177,9 @@ def profile():
             session["user"] = updated_user
             return redirect(url_for("profile", saved="1"))
 
-    return render_template("profile.html", user=user, error=error, saved=request.args.get("saved") == "1", country_options=COUNTRY_OPTIONS)
+    birth_date = datetime.strptime(user["dob"], "%Y-%m-%d").date()
+    profile_age = date.today().year - birth_date.year - ((date.today().month, date.today().day) < (birth_date.month, birth_date.day))
+    return render_template("profile.html", user=user, age=profile_age, error=error, saved=request.args.get("saved") == "1", country_options=COUNTRY_OPTIONS)
 
 
 @app.route("/logout")

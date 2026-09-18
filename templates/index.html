@@ -18,7 +18,7 @@
             </nav>
             <div class="sidebar-bottom">
                 <div class="privacy-note"><span class="lock-icon">⌑</span><span><strong>Your data is yours</strong><small>Stored privately on this device</small></span></div>
-                <a class="profile-button" href="{{ url_for('profile') }}"><span class="avatar">{{ user.get('full_name', 'AM')[:2].upper() }}</span><span><strong>{{ user.get('full_name', 'Amelia Morgan') }}</strong><small>Open my profile</small></span><span class="chevron">›</span></a>
+                <a class="profile-button" href="{{ url_for('profile') }}"><span class="avatar avatar-fallback">{{ user.get('full_name', 'AM')[:2].upper() }}</span><img class="profile-avatar-photo" id="dashboard-profile-photo" alt="" hidden><span><strong>{{ user.get('full_name', 'Amelia Morgan') }}</strong><small>Open my profile</small></span><span class="chevron">›</span></a>
             </div>
         </aside>
 
@@ -57,5 +57,6 @@
     </div>
     <div class="modal-backdrop" id="cycle-modal" hidden><section class="cycle-modal" role="dialog" aria-modal="true" aria-labelledby="cycle-modal-title"><button class="modal-close" type="button" id="close-cycle-modal" aria-label="Close update cycle dialog">×</button><p class="eyebrow">Make it yours</p><h2 id="cycle-modal-title">Update your cycle</h2><p class="modal-intro">Tell us a few gentle details and we’ll refresh your period, fertile window, and ovulation dates.</p><form id="cycle-form" class="cycle-form"><label for="last-period">First day of your last period</label><input id="last-period" type="date" required><div class="cycle-input-row"><label for="cycle-length">Typical cycle length<span><input id="cycle-length" type="number" min="21" max="45" required></span></label><label for="period-length">Period length<span><input id="period-length" type="number" min="2" max="10" required></span></label></div><button class="login-button" type="submit">Save my cycle <span>→</span></button><p class="cycle-save-status" id="cycle-save-status" role="status"></p></form></section></div>
     <script src="{{ url_for('static', filename='css/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='css/profile.js') }}"></script>
 </body>
 </html>
