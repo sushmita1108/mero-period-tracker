@@ -63,10 +63,15 @@ def load_accounts():
 
 
 def save_account(user):
-    ACCOUNTS_FILE.parent.mkdir(exist_ok=True)
-    accounts = load_accounts()
-    accounts[f"{user['country_code']}:{user['phone']}"] = user
-    ACCOUNTS_FILE.write_text(json.dumps(accounts, indent=2), encoding="utf-8")
+    try:
+        ACCOUNTS_FILE.parent.mkdir(exist_ok=True)
+        accounts = load_accounts()
+        accounts[f"{user['country_code']}:{user['phone']}"] = user
+        ACCOUNTS_FILE.write_text(json.dumps(accounts, indent=2), encoding="utf-8")
+    except OSError:
+        # Vercel's filesystem is not persistent; the signed session still completes this login flow.
+        return False
+    return True
 
 @app.route("/")
 def home():
