@@ -74,6 +74,29 @@ function updateCycleSummary() {
 	document.querySelector('#timing-period').textContent = dateLabel(dates.nextPeriod, true);
 	document.querySelector('#timing-fertile').textContent = `${dateLabel(dates.fertileStart)} – ${dateLabel(dates.fertileEnd)}`;
 	document.querySelector('#timing-ovulation').textContent = dateLabel(dates.ovulation, true);
+	const cycleLengthValue = document.querySelector('#overview-cycle-length');
+	const periodLengthValue = document.querySelector('#overview-period-length');
+	if (cycleLengthValue) cycleLengthValue.textContent = cycle.cycleLength;
+	if (periodLengthValue) periodLengthValue.textContent = cycle.periodLength;
+}
+
+function updateOverviewInsights() {
+	const health = document.querySelector('#overview-cycle-health');
+	const healthNote = document.querySelector('#overview-cycle-health-note');
+	const insightTitle = document.querySelector('#overview-insight-title');
+	const insightText = document.querySelector('#overview-insight-text');
+	if (!health || !healthNote || !insightTitle || !insightText) return;
+	const checkIn = JSON.parse(localStorage.getItem('cycle-check-in') || 'null');
+	const craving = localStorage.getItem('mero-cycle-craving');
+	const pattern = localStorage.getItem('mero-cycle-mood-pattern');
+	const phase = document.querySelector('#phase-name').textContent;
+	health.textContent = phase === 'period days' ? 'Be gentle' : phase === 'fertile window' ? 'Feeling bright' : 'Looking good';
+	healthNote.textContent = `you are in your ${phase}`;
+	if (checkIn?.mood || pattern || craving) {
+		const mood = checkIn?.mood || pattern;
+		insightTitle.textContent = 'Your check-in is saved';
+		insightText.textContent = `Today you felt ${mood.toLowerCase()}${craving ? ` and craved something ${craving.toLowerCase()}` : ''}. Keep listening to what you need.`;
+	}
 }
 
 function renderCalendar() {
@@ -117,6 +140,7 @@ function renderCalendar() {
 
 renderCalendar();
 updateCycleSummary();
+updateOverviewInsights();
 previousMonth.addEventListener('click', () => {
 	displayedMonth = new Date(displayedMonth.getFullYear(), displayedMonth.getMonth() - 1, 1);
 	renderCalendar();
