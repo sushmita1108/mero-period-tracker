@@ -168,6 +168,13 @@ def insights():
     return render_template("insights.html", user=session["user"])
 
 
+@app.route("/ai")
+def ai_companion():
+    if not session.get("user"):
+        return redirect(url_for("login"))
+    return render_template("ai.html", user=session["user"])
+
+
 @app.route("/profile")
 def profile():
     if not session.get("user"):
