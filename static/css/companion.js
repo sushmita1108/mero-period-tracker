@@ -5,7 +5,20 @@ const languageSelect = document.querySelector('#chat-language');
 const voiceToggle = document.querySelector('#voice-toggle');
 const micButton = document.querySelector('#mic-button');
 const voiceStatus = document.querySelector('#voice-status');
+const dailyQuestion = document.querySelector('#daily-question');
+const dailyQuestionButton = document.querySelector('#daily-question-button');
 const chatStorageKey = 'mero-cycle-companion-chat';
+const firstName = document.body.dataset.userName || 'friend';
+const dayNumber = Math.floor(Date.now() / 86400000);
+const dailyQuestions = [
+    'What would make today feel a little softer?',
+    'What is one small thing your body needs today?',
+    'What feeling would you like to make room for?',
+    'What are you proud of yourself for this week?',
+    'What kind of care sounds comforting right now?',
+];
+const todaysQuestion = dailyQuestions[dayNumber % dailyQuestions.length];
+dailyQuestion.textContent = todaysQuestion;
 let speakReplies = false;
 let selectedLanguage = localStorage.getItem('mero-cycle-language') || 'en-US';
 languageSelect.value = selectedLanguage;
@@ -59,7 +72,7 @@ function saveChat() {
 
 const savedMessages = JSON.parse(localStorage.getItem(chatStorageKey) || '[]');
 if (savedMessages.length) savedMessages.forEach((message) => addMessage(message.text, message.sender));
-else addMessage('Hi! I am here to listen, help you notice your cycle, or simply keep you company. What is on your mind?', 'companion');
+else addMessage(`Hi ${firstName}! I am here for your daily check-in. ${todaysQuestion}`, 'companion');
 
 function sendMessage(text) {
     const cleanText = text.trim();
@@ -77,6 +90,7 @@ chatForm.addEventListener('submit', (event) => {
 });
 
 document.querySelectorAll('[data-prompt]').forEach((button) => button.addEventListener('click', () => sendMessage(button.dataset.prompt)));
+dailyQuestionButton.addEventListener('click', () => { chatInput.value = todaysQuestion; chatInput.focus(); });
 
 languageSelect.addEventListener('change', () => {
     selectedLanguage = languageSelect.value;
