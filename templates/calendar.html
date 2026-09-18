@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar | Mero Cycle</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="dashboard-page standalone-page">
+    <div class="app-shell">
+        <aside class="sidebar">
+            <a class="brand" href="{{ url_for('dashboard') }}" aria-label="Mero Cycle home"><span class="brand-mark">✦</span><span>mero cycle<span class="brand-dot">.</span></span></a>
+            <p class="sidebar-label">Your space</p>
+            <nav class="main-nav" aria-label="Main navigation">
+                <a class="nav-item" href="{{ url_for('dashboard') }}"><span class="nav-icon">▦</span>Overview</a>
+                <a class="nav-item active" href="{{ url_for('calendar') }}"><span class="nav-icon">□</span>Calendar</a>
+                <a class="nav-item" href="{{ url_for('insights') }}"><span class="nav-icon">◒</span>Insights</a>
+            </nav>
+            <div class="sidebar-bottom"><div class="privacy-note"><span class="lock-icon">⌑</span><span><strong>Your data is yours</strong><small>Stored privately on this device</small></span></div><a class="profile-button standalone-profile" href="{{ url_for('dashboard') }}"><span class="avatar">{{ user.get('full_name', 'AM')[:2].upper() }}</span><span><strong>{{ user.get('full_name', 'My profile') }}</strong><small>Back to overview</small></span></a></div>
+        </aside>
+        <main class="main-content" id="top">
+            <header class="topbar"><div><p class="eyebrow">Mero Cycle · Your monthly view</p><h1>{{ user.get('full_name', 'Friend').split(' ')[0] }}'s calendar <span class="wave">✦</span></h1><p class="topbar-slogan">Every day is part of your story.</p></div><a class="secondary-button standalone-back" href="{{ url_for('dashboard') }}">← Overview</a></header>
+            <section class="standalone-hero calendar-hero"><div><p class="eyebrow light">A gentle look ahead</p><h2>Notice your<br><em>natural rhythm.</em></h2><p>Keep your period, fertile days, and ovulation moments close at hand.</p></div><span class="standalone-hero-sticker">🗓️</span></section>
+            <section class="panel standalone-calendar-panel"><div class="panel-heading"><div><p class="eyebrow">September 2026</p><h2>Your calendar</h2></div><div class="month-controls"><button type="button" aria-label="Previous month">‹</button><button type="button" aria-label="Next month">›</button></div></div><div class="calendar large-calendar"><div class="weekdays"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div><div class="days"><span class="day period">1</span><span class="day period">2</span><span class="day period">3</span><span class="day period">4</span><span class="day period">5</span><span class="day">6</span><span class="day">7</span><span class="day">8</span><span class="day fertile">9</span><span class="day fertile">10</span><span class="day fertile">11</span><span class="day fertile">12</span><span class="day fertile">13</span><span class="day fertile">14</span><span class="day today">15</span><span class="day">16</span><span class="day">17</span><span class="day">18</span><span class="day">19</span><span class="day">20</span><span class="day">21</span><span class="day">22</span><span class="day">23</span><span class="day">24</span><span class="day">25</span><span class="day">26</span><span class="day">27</span><span class="day">28</span><span class="day">29</span><span class="day">30</span></div></div><div class="calendar-legend"><span><i class="legend-dot pink"></i>Period</span><span><i class="legend-dot peach"></i>Fertile days</span><span><i class="legend-dot outlined"></i>Today</span></div></section>
+            <section class="timing-strip standalone-timing"><div class="timing-title"><span class="sparkle">✦</span><strong>Cycle map</strong><small>your little landmarks</small></div><div class="timing-item timing-period"><span>🌸</span><div><small>Next period</small><strong>September 24</strong></div></div><div class="timing-item timing-fertile"><span>🌼</span><div><small>Fertile window</small><strong>Sep 5 – Sep 10</strong></div></div><div class="timing-item timing-ovulation"><span>✨</span><div><small>Ovulation day</small><strong>September 9</strong></div></div></section>
+            <footer class="footer"><span>Mero Cycle is a calm space for your body.</span><span>Last synced just now</span></footer>
+        </main>
+    </div>
+</body>
+</html>

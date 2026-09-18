@@ -130,6 +130,20 @@ def dashboard():
     return render_template("index.html", user=session["user"])
 
 
+@app.route("/calendar")
+def calendar():
+    if not session.get("user"):
+        return redirect(url_for("login"))
+    return render_template("calendar.html", user=session["user"])
+
+
+@app.route("/insights")
+def insights():
+    if not session.get("user"):
+        return redirect(url_for("login"))
+    return render_template("insights.html", user=session["user"])
+
+
 @app.route("/logout")
 def logout():
     session.pop("user", None)

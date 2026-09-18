@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insights | Mero Cycle</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="dashboard-page standalone-page">
+    <div class="app-shell">
+        <aside class="sidebar">
+            <a class="brand" href="{{ url_for('dashboard') }}" aria-label="Mero Cycle home"><span class="brand-mark">✦</span><span>mero cycle<span class="brand-dot">.</span></span></a>
+            <p class="sidebar-label">Your space</p>
+            <nav class="main-nav" aria-label="Main navigation">
+                <a class="nav-item" href="{{ url_for('dashboard') }}"><span class="nav-icon">▦</span>Overview</a>
+                <a class="nav-item" href="{{ url_for('calendar') }}"><span class="nav-icon">□</span>Calendar</a>
+                <a class="nav-item active" href="{{ url_for('insights') }}"><span class="nav-icon">◒</span>Insights</a>
+            </nav>
+            <div class="sidebar-bottom"><div class="privacy-note"><span class="lock-icon">⌑</span><span><strong>Your data is yours</strong><small>Stored privately on this device</small></span></div><a class="profile-button standalone-profile" href="{{ url_for('dashboard') }}"><span class="avatar">{{ user.get('full_name', 'AM')[:2].upper() }}</span><span><strong>{{ user.get('full_name', 'My profile') }}</strong><small>Back to overview</small></span></a></div>
+        </aside>
+        <main class="main-content" id="top">
+            <header class="topbar"><div><p class="eyebrow">Mero Cycle · Little body wisdom</p><h1>Your gentle insights <span class="wave">✦</span></h1><p class="topbar-slogan">Listen in. Learn softly. Feel supported.</p></div><a class="secondary-button standalone-back" href="{{ url_for('dashboard') }}">← Overview</a></header>
+            <section class="standalone-hero insights-hero"><div><p class="eyebrow light">A kinder way to notice</p><h2>Your body has<br><em>its own language.</em></h2><p>These simple patterns can help you meet each phase with more care.</p></div><span class="standalone-hero-sticker">💞</span></section>
+            <section class="phase-guide standalone-phases" aria-labelledby="phase-guide-heading"><div class="phase-heading"><div><p class="eyebrow">A little body wisdom</p><h2 id="phase-guide-heading">Your four cycle phases</h2></div><span class="phase-heading-sticker">🌙</span></div><div class="phase-list"><article class="phase-card phase-menstrual"><span class="phase-emoji">🌸</span><div><strong>Menstrual</strong><small>Rest &amp; reset</small><p>Be extra kind to your energy.</p></div></article><article class="phase-card phase-follicular"><span class="phase-emoji">🌱</span><div><strong>Follicular</strong><small>Fresh beginnings</small><p>Curiosity and energy bloom.</p></div></article><article class="phase-card phase-ovulation"><span class="phase-emoji">☀️</span><div><strong>Ovulation</strong><small>Bright &amp; social</small><p>Share your spark with the world.</p></div></article><article class="phase-card phase-luteal"><span class="phase-emoji">🌙</span><div><strong>Luteal</strong><small>Slow &amp; settle</small><p>Make room for quiet focus.</p></div></article></div></section>
+            <section class="insight-grid"><article class="insight-card insight-pink"><span>🌷</span><div><p class="eyebrow">Today’s reminder</p><h2>Rest is productive.</h2><p>You do not have to earn a slower day. Your body is already doing important work.</p></div></article><article class="insight-card insight-yellow"><span>✨</span><div><p class="eyebrow">A tiny ritual</p><h2>Check in with yourself.</h2><p>Notice one sensation, one feeling, and one thing you need today.</p></div></article></section>
+            <footer class="footer"><span>Mero Cycle is a calm space for your body.</span><span>Last synced just now</span></footer>
+        </main>
+    </div>
+</body>
+</html>
