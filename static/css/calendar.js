@@ -9,6 +9,7 @@ const selectedNoteDate = document.querySelector('#selected-note-date');
 const noteSaveStatus = document.querySelector('#note-save-status');
 const closeNoteModal = document.querySelector('#close-note-modal');
 const periodDaysInput = document.querySelector('#period-days');
+const averageCycleInput = document.querySelector('#average-cycle');
 const setPeriodStart = document.querySelector('#set-period-start');
 const dateNotes = JSON.parse(localStorage.getItem('mero-cycle-date-notes') || '{}');
 const cycleSettings = JSON.parse(localStorage.getItem('cycle-settings') || 'null') || { cycleLength: 28, periodLength: 5 };
@@ -40,6 +41,18 @@ function cycleDates() {
     const nextPeriod = addDays(lastPeriod, Number(cycleSettings.cycleLength || 28));
     const ovulation = addDays(nextPeriod, -14);
     return { lastPeriod, nextPeriod, fertileStart: addDays(ovulation, -5), fertileEnd: addDays(ovulation, 1) };
+}
+
+function dateLabel(date, withYear = false) {
+    return date.toLocaleDateString(undefined, { month: withYear ? 'long' : 'short', day: 'numeric', ...(withYear ? { year: 'numeric' } : {}) });
+}
+
+function updateCycleMap() {
+    const dates = cycleDates();
+    document.querySelector('#calendar-cycle-length').textContent = Number(cycleSettings.cycleLength || 28);
+    document.querySelector('#calendar-next-period').textContent = dateLabel(dates.nextPeriod, true);
+    document.querySelector('#calendar-fertile-window').textContent = `${dateLabel(dates.fertileStart)} – ${dateLabel(dates.fertileEnd)}`;
+    document.querySelector('#calendar-ovulation').textContent = dateLabel(addDays(dates.fertileEnd, -1), true);
 }
 
 function renderCalendar() {
@@ -100,6 +113,7 @@ calendarDays.addEventListener('click', (event) => {
         selectedNoteDate.textContent = displayDate(activeDate);
         noteInput.value = dateNotes[activeDate] || '';
         periodDaysInput.value = cycleSettings.periodLength || 5;
+        averageCycleInput.value = cycleSettings.cycleLength || 28;
         noteModal.hidden = false;
         noteInput.focus();
     }
@@ -121,8 +135,10 @@ noteModal.addEventListener('click', (event) => { if (event.target === noteModal)
 setPeriodStart.addEventListener('click', () => {
     cycleSettings.lastPeriod = activeDate;
     cycleSettings.periodLength = Number(periodDaysInput.value) || 5;
+    cycleSettings.cycleLength = Number(averageCycleInput.value) || 28;
     localStorage.setItem('cycle-settings', JSON.stringify(cycleSettings));
     renderCalendar();
+    updateCycleMap();
     setPeriodStart.textContent = 'Period updated ✓';
     setPeriodStart.classList.add('saved');
     setTimeout(() => { noteModal.hidden = true; setPeriodStart.textContent = 'Use this date as period start'; setPeriodStart.classList.remove('saved'); }, 700);

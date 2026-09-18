@@ -24,7 +24,7 @@
 
         <main class="main-content" id="top">
             <header class="topbar">
-                <div><p class="eyebrow">Mero Cycle · Monday, September 18, 2026</p><h1>Good morning, <span class="name-highlight">{{ user.get('full_name', 'friend').split(' ')[0] }}</span> <span class="wave">✦</span></h1><p class="topbar-slogan">Your body, your rhythm, your story.</p></div>
+                <div><p class="eyebrow" id="today-label">Mero Cycle · Today</p><h1><span id="time-greeting">Good morning</span>, <span class="name-highlight">{{ user.get('full_name', 'friend').split(' ')[0] }}</span> <span class="wave">✦</span></h1><p class="current-time" id="current-time" aria-live="polite"></p><p class="topbar-slogan">Your body, your rhythm, your story.</p></div>
                 <div class="header-actions"><button class="icon-button" type="button" aria-label="Notifications">♧<span class="notification-dot"></span></button><button class="secondary-button" type="button" id="update-cycle">♡ Update cycle</button><button class="primary-button" type="button" id="log-period"><span>+</span> Log today</button></div>
             </header>
 

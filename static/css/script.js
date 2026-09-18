@@ -14,6 +14,22 @@ const cycleLengthInput = document.querySelector('#cycle-length');
 const periodLengthInput = document.querySelector('#period-length');
 const cycleSaveStatus = document.querySelector('#cycle-save-status');
 
+function updateHeaderTime() {
+	const now = new Date();
+	const hour = now.getHours();
+	const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+	const timeGreeting = document.querySelector('#time-greeting');
+	const currentTime = document.querySelector('#current-time');
+	const todayLabel = document.querySelector('#today-label');
+	if (!timeGreeting || !currentTime || !todayLabel) return;
+	timeGreeting.textContent = greeting;
+	currentTime.textContent = now.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+	todayLabel.textContent = `Mero Cycle · ${now.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}`;
+}
+
+updateHeaderTime();
+setInterval(updateHeaderTime, 30000);
+
 const today = new Date();
 let displayedMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 const formatInputDate = (date) => {
