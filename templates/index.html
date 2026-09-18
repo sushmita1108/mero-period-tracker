@@ -6,7 +6,7 @@
     <title>Mero Cycle | Your gentle period tracker</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body>
+<body class="dashboard-page">
     <div class="app-shell">
         <aside class="sidebar">
             <a class="brand" href="#top" aria-label="Mero Cycle home"><span class="brand-mark">✦</span><span>mero cycle<span class="brand-dot">.</span></span></a>
@@ -24,7 +24,7 @@
 
         <main class="main-content" id="top">
             <header class="topbar">
-                <div><p class="eyebrow">Mero Cycle · Monday, September 18, 2026</p><h1>Good morning, {{ user.get('full_name', 'friend').split(' ')[0] }} <span class="wave">✦</span></h1><p class="topbar-slogan">Your body, your rhythm, your story.</p></div>
+                <div><p class="eyebrow">Mero Cycle · Monday, September 18, 2026</p><h1>Good morning, <span class="name-highlight">{{ user.get('full_name', 'friend').split(' ')[0] }}</span> <span class="wave">✦</span></h1><p class="topbar-slogan">Your body, your rhythm, your story.</p></div>
                 <div class="header-actions"><button class="icon-button" type="button" aria-label="Notifications">♧<span class="notification-dot"></span></button><button class="primary-button" type="button" id="log-period"><span>+</span> Log today</button></div>
             </header>
 
@@ -32,7 +32,7 @@
                 <div class="hero-copy"><p class="eyebrow light">Your current cycle</p><h2 id="cycle-heading">Your period is<br><em>in 6 days</em></h2><p class="hero-description">You are in your <strong>luteal phase</strong>. Your next period is expected on September 24.</p><p class="hero-slogan">Small check-ins. Softer days. More you.</p><button class="text-button" type="button" id="details-button">View cycle details <span>→</span></button></div>
                 <div class="cycle-orbit" aria-label="Cycle day 22 of 28"><div class="orbit-ring"></div><div class="orbit-ring orbit-ring-inner"></div><div class="orbit-center"><strong>22</strong><span>cycle day</span></div><span class="orbit-dot dot-one"></span><span class="orbit-dot dot-two"></span><span class="orbit-dot dot-three"></span></div>
                 <div class="hero-footer"><span><i class="legend-dot pink"></i>Period</span><span><i class="legend-dot peach"></i>Fertile window</span><span><i class="legend-dot blue"></i>Today</span></div>
-                <div class="dashboard-stickers" aria-hidden="true"><span class="dashboard-sticker sticker-rainbow">🌈</span><span class="dashboard-sticker sticker-butterfly">🦋</span><span class="dashboard-sticker sticker-flower-small">🌼</span></div>
+                <div class="dashboard-stickers" aria-hidden="true"><span class="dashboard-sticker sticker-rainbow">🌈</span><span class="dashboard-sticker sticker-butterfly">🦋</span><span class="dashboard-sticker sticker-flower-small">🌼</span><span class="dashboard-sticker sticker-cloud-small">☁️</span></div>
             </section>
 
             <section class="stat-grid" aria-label="Cycle summary">
