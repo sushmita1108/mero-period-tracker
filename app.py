@@ -168,8 +168,19 @@ def insights():
     return render_template("insights.html", user=session["user"])
 
 
-@app.route("/profile", methods=["GET", "POST"])
+@app.route("/profile")
 def profile():
+    if not session.get("user"):
+        return redirect(url_for("login"))
+
+    user = session["user"]
+    birth_date = datetime.strptime(user["dob"], "%Y-%m-%d").date()
+    profile_age = date.today().year - birth_date.year - ((date.today().month, date.today().day) < (birth_date.month, birth_date.day))
+    return render_template("profile_view.html", user=user, age=profile_age, saved=request.args.get("saved") == "1")
+
+
+@app.route("/profile/edit", methods=["GET", "POST"])
+def profile_edit():
     if not session.get("user"):
         return redirect(url_for("login"))
 

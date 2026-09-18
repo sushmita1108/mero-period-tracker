@@ -14,7 +14,7 @@
             <div class="profile-sticker" aria-hidden="true">💖</div>
         </section>
         <section class="profile-card" aria-labelledby="profile-heading">
-            <a class="back-link" href="{{ url_for('dashboard') }}">← Back to dashboard</a>
+            <a class="back-link" href="{{ url_for('profile') }}">← Back to profile</a>
             <p class="eyebrow">My profile</p>
             <h2 id="profile-heading">Your details</h2>
             <p class="profile-subtitle">Update your details anytime.</p>
@@ -23,7 +23,7 @@
             <div class="profile-picture-block"><div class="profile-picture-frame"><span class="avatar avatar-fallback profile-large-fallback">{{ user.get('full_name', 'AM')[:2].upper() }}</span><img class="profile-photo-preview" id="profile-photo-preview" alt="Your profile picture" hidden></div><div><strong>Profile picture</strong><small>Choose a cheerful photo from your device.</small><label class="picture-button" for="profile-photo">Choose picture</label><input id="profile-photo" type="file" accept="image/png,image/jpeg,image/webp" hidden></div></div>
             <div class="profile-detail-summary"><span><small>Age</small><strong>{{ age }} years</strong></span><span><small>Account</small><strong>Private</strong></span></div>
             <div class="edit-profile-heading" id="edit-profile"><h3>Edit your details</h3></div>
-            <form method="post" action="{{ url_for('profile') }}" class="login-form" id="profile-form">
+            <form method="post" action="{{ url_for('profile_edit') }}" class="login-form" id="profile-form">
                 <label for="full_name">Full name</label>
                 <div class="name-field"><input id="full_name" name="full_name" type="text" autocomplete="name" value="{{ user.get('full_name', '') }}" required></div>
                 <label for="phone">Phone number</label>

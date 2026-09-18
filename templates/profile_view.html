@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My profile | Mero Cycle</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="login-page profile-page">
+    <main class="profile-shell">
+        <section class="profile-welcome">
+            <a class="brand login-brand" href="{{ url_for('dashboard') }}" aria-label="Mero Cycle home"><span class="brand-mark">✦</span><span>mero cycle<span class="brand-dot">.</span></span></a>
+            <div class="profile-welcome-copy"><p class="eyebrow">My profile</p><h1>Just<br><em>you.</em></h1><p>Your personal space, kept simple and private.</p></div>
+            <div class="profile-sticker" aria-hidden="true">💖</div>
+        </section>
+        <section class="profile-card profile-view-card" aria-labelledby="profile-heading">
+            <a class="back-link" href="{{ url_for('dashboard') }}">← Back to dashboard</a>
+            <p class="eyebrow">My profile</p>
+            <h2 id="profile-heading">{{ user.get('full_name', 'Your profile') }}</h2>
+            <p class="profile-subtitle">Your saved details</p>
+            {% if saved %}<div class="form-success" role="status">Your profile was updated.</div>{% endif %}
+            <div class="profile-picture-block profile-view-picture"><div class="profile-picture-frame"><span class="avatar avatar-fallback profile-large-fallback">{{ user.get('full_name', 'AM')[:2].upper() }}</span><img class="profile-photo-preview" id="profile-photo-preview" alt="Your profile picture" hidden></div><div><strong>Profile picture</strong><small>Your picture is saved on this device.</small></div></div>
+            <div class="profile-readonly-list"><div><small>Phone number</small><strong>{{ user.get('country_code', '') }} {{ user.get('phone', '') }}</strong></div><div><small>Date of birth</small><strong>{{ user.get('dob', '') }}</strong></div><div><small>Age</small><strong>{{ age }} years</strong></div><div><small>Tracking goal</small><strong>{{ user.get('tracking_goal', 'Understand my cycle') }}</strong></div><div><small>Pronouns</small><strong>{{ user.get('pronouns', 'Not added') }}</strong></div><div><small>About</small><strong>{{ user.get('about', 'Not added') }}</strong></div></div>
+            <a class="edit-profile-button" href="{{ url_for('profile_edit') }}">✎ Edit profile details</a>
+            <div class="profile-actions"><p>Finished here?</p><a class="logout-link" href="{{ url_for('logout') }}">Log out of Mero Cycle</a></div>
+        </section>
+    </main>
+    <script src="{{ url_for('static', filename='css/profile.js') }}"></script>
+</body>
+</html>
