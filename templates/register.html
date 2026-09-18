@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create your Cycle account</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="login-page register-page">
+    <main class="login-shell">
+        <section class="login-intro">
+            <a class="brand login-brand" href="{{ url_for('register') }}" aria-label="Cycle home"><span class="brand-mark">✦</span><span>cycle<span class="brand-dot">.</span></span></a>
+            <div class="intro-copy"><p class="eyebrow">A softer way to track</p><h1>Make space for<br><em>your rhythm.</em></h1><p>Your cycle is personal. Cycle helps you notice patterns with a little more ease and a lot more care.</p></div>
+            <div class="intro-orbit" aria-hidden="true"><span class="intro-sun">✦</span><span class="intro-star star-a">✦</span><span class="intro-star star-b">·</span><span class="intro-arc"></span></div>
+            <div class="sticker-cloud" aria-hidden="true"><span class="cute-sticker sticker-flower">🌸</span><span class="cute-sticker sticker-heart">💗</span><span class="cute-sticker sticker-sparkle">✨</span></div>
+            <p class="privacy-line"><span>⌑</span> Your information stays private on this device.</p>
+        </section>
+
+        <section class="login-card" aria-labelledby="register-heading">
+            <div class="mobile-brand"><a class="brand" href="{{ url_for('register') }}"><span class="brand-mark">✦</span><span>cycle<span class="brand-dot">.</span></span></a></div>
+            <p class="eyebrow">Create your account</p>
+            <h2 id="register-heading">A little hello<br><em>to your future self.</em></h2>
+            <p class="login-subtitle">Use your phone number and date of birth to begin your private cycle space.</p>
+            {% if error %}<div class="form-error" role="alert">{{ error }}</div>{% endif %}
+            <form method="post" action="{{ url_for('register') }}" class="login-form">
+                <label for="full_name">Full name</label>
+                <div class="name-field"><input id="full_name" name="full_name" type="text" autocomplete="name" placeholder="e.g. Amelia Morgan" value="{{ request.form.get('full_name', '') }}" required></div>
+                <label for="phone">Phone number</label>
+                <div class="phone-field"><select id="country_code" name="country_code" aria-label="Country code" required>{% for flag, country, code in country_options %}<option value="{{ code }}" {% if request.form.get('country_code', '+1') == code %}selected{% endif %}>{{ flag }} {{ country }} {{ code }}</option>{% endfor %}</select><input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="555 123 4567" value="{{ request.form.get('phone', '') }}" required></div>
+                <label for="dob">Date of birth</label>
+                <div class="date-field"><input id="dob" name="dob" type="date" autocomplete="bday" value="{{ request.form.get('dob', '') }}" required></div>
+                <button class="login-button" type="submit">Create my account <span>→</span></button>
+            </form>
+            <p class="switch-auth">Already registered? <a href="{{ url_for('login') }}">Log in</a></p>
+            <p class="login-footnote">Your date of birth helps us keep your experience age-appropriate.</p>
+        </section>
+    </main>
+</body>
+</html>
