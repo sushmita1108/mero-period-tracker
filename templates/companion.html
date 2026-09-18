@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mero Companion | Mero Cycle</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="dashboard-page standalone-page companion-page">
+    <div class="app-shell">
+        <aside class="sidebar">
+            <a class="brand" href="{{ url_for('dashboard') }}" aria-label="Mero Cycle home"><span class="brand-mark">✦</span><span>mero cycle<span class="brand-dot">.</span></span></a>
+            <p class="sidebar-label">Your space</p>
+            <nav class="main-nav" aria-label="Main navigation">
+                <a class="nav-item" href="{{ url_for('dashboard') }}"><span class="nav-icon">▦</span>Overview</a>
+                <a class="nav-item" href="{{ url_for('calendar') }}"><span class="nav-icon">□</span>Calendar</a>
+                <a class="nav-item" href="{{ url_for('insights') }}"><span class="nav-icon">◒</span>Insights</a>
+                <a class="nav-item active" href="{{ url_for('ai_companion') }}"><span class="nav-icon">♡</span>Companion</a>
+            </nav>
+            <div class="sidebar-bottom"><div class="privacy-note"><span class="lock-icon">⌑</span><span><strong>Your chat stays here</strong><small>Saved privately on this device</small></span></div><a class="profile-button standalone-profile" href="{{ url_for('profile') }}"><span class="avatar avatar-fallback">{{ user.get('full_name', 'AM')[:2].upper() }}</span><img class="profile-avatar-photo" id="companion-profile-photo" alt="" hidden><span><strong>{{ user.get('full_name', 'My profile') }}</strong><small>Open my profile</small></span></a></div>
+        </aside>
+        <main class="main-content companion-main" id="top">
+            <header class="topbar"><div><p class="eyebrow">Mero Cycle · Your everyday companion</p><h1>Hi {{ user.get('full_name', 'friend').split(' ')[0] }} <span class="wave">✦</span></h1><p class="topbar-slogan">A soft place to think out loud.</p></div><a class="secondary-button standalone-back" href="{{ url_for('dashboard') }}">← Overview</a></header>
+            <section class="companion-layout">
+                <section class="chat-card" aria-labelledby="companion-heading"><div class="chat-header"><div class="companion-avatar">✦</div><div><p class="eyebrow">Mero Companion</p><h2 id="companion-heading">How are you feeling today?</h2><span class="online-dot">● Here with you</span></div><span class="chat-sticker">💞</span></div><div class="chat-tools"><label for="chat-language">Chat language<select id="chat-language"><option value="en-US">English</option><option value="hi-IN">हिन्दी</option><option value="es-ES">Español</option><option value="ne-NP">नेपाली</option></select></label><button type="button" id="voice-toggle" class="voice-button" aria-pressed="false">🔊 Read replies aloud</button></div><p class="voice-status" id="voice-status" role="status">Type a message or tap the microphone to speak.</p><div class="chat-messages" id="chat-messages" aria-live="polite"></div><form class="chat-form" id="chat-form"><input id="chat-input" type="text" autocomplete="off" placeholder="Tell me what is on your mind..." aria-label="Message Mero Companion" required><button type="button" id="mic-button" aria-label="Speak and send your message">🎙️</button><button type="submit" aria-label="Send message">➤</button></form></section>
+                <aside class="companion-side"><div class="prompt-card"><p class="eyebrow">Try saying</p><button type="button" data-prompt="I feel tired today">“I feel tired today”</button><button type="button" data-prompt="I have period cramps">“I have period cramps”</button><button type="button" data-prompt="I am craving something sweet">“I am craving something sweet”</button><button type="button" data-prompt="I just want to talk">“I just want to talk”</button></div><div class="safe-card"><span>🌷</span><strong>A gentle reminder</strong><p>I can listen and share general wellbeing ideas. For severe or worrying symptoms, please talk with a trusted adult or healthcare professional.</p></div></aside>
+            </section>
+            <footer class="footer"><span>Mero Cycle is a calm space for your body.</span><span>Your conversation is stored on this device.</span></footer>
+        </main>
+    </div>
+    <script src="{{ url_for('static', filename='css/profile.js') }}"></script>
+    <script src="{{ url_for('static', filename='css/companion.js') }}"></script>
+</body>
+</html>
