@@ -28,11 +28,21 @@ let selectedLanguage = localStorage.getItem('mero-cycle-language') || 'en-US';
 languageSelect.value = selectedLanguage;
 
 const responses = [
+    { words: ['hello', 'hi', 'hey', 'namaste'], text: 'Hey, I am glad you stopped by. How is your day actually going?' },
+    { words: ['thanks', 'thank', 'great', 'good'], text: 'Of course. I am happy to keep you company. What else is on your mind?' },
     { words: ['tired', 'exhausted', 'sleep'], text: 'That sounds like a low-energy day. A drink of water, something nourishing, and a little extra rest may help. You do not have to push through everything.' },
     { words: ['cramp', 'pain', 'ache'], text: 'I am sorry you are uncomfortable. A warm compress, gentle movement, and rest can feel soothing. If pain is severe or unusual, please tell a trusted adult or healthcare professional.' },
     { words: ['sweet', 'chocolate', 'craving', 'salty'], text: 'Cravings can be a normal part of your cycle. You can enjoy what sounds good and add something nourishing alongside it, like fruit, yogurt, or a warm meal.' },
     { words: ['sad', 'low', 'upset', 'cry', 'lonely'], text: 'I am glad you said something. You deserve support today. Would a small comforting step help, like texting someone you trust, listening to music, or getting cozy?' },
     { words: ['period', 'cycle', 'phase', 'ovulation'], text: 'Your cycle can change how your energy and feelings move. You can use Calendar to update your dates and Insights to notice patterns gently over time.' },
+];
+
+const everydayReplies = [
+    'I hear you. What part of that feels biggest right now?',
+    'That makes sense. Do you want comfort, ideas, or simply someone to listen?',
+    'Tell me more in your own words. There is no perfect way to explain it.',
+    'I am with you. What happened next?',
+    'That sounds worth noticing. How is it sitting with you now?',
 ];
 
 const translations = {
@@ -60,7 +70,7 @@ function speak(text) {
 function getReply(text) {
     const normalized = text.toLowerCase();
     const match = responses.find((item) => item.words.some((word) => normalized.includes(word)));
-    if (selectedLanguage === 'en-US') return match ? match.text : 'I am listening. Tell me a little more about what today feels like for you.';
+    if (selectedLanguage === 'en-US') return match ? match.text : everydayReplies[Math.floor(Math.random() * everydayReplies.length)];
     const language = translations[selectedLanguage];
     if (!match) return language.fallback;
     if (match.words.includes('tired')) return language.tired;
