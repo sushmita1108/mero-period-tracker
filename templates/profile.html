@@ -29,6 +29,12 @@
                 <div class="phone-field"><select id="country_code" name="country_code" aria-label="Country code" required>{% for flag, country, code in country_options %}<option value="{{ code }}" {% if user.get('country_code', '+1') == code %}selected{% endif %}>{{ flag }} {{ country }} {{ code }}</option>{% endfor %}</select><input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" value="{{ user.get('phone', '') }}" required></div>
                 <label for="dob">Date of birth</label>
                 <div class="date-field"><input id="dob" name="dob" type="date" autocomplete="bday" value="{{ user.get('dob', '') }}" required></div>
+                <div class="profile-extra-grid">
+                    <label for="pronouns">Pronouns <span class="optional-label">optional</span><input id="pronouns" name="pronouns" type="text" placeholder="e.g. she/her" value="{{ user.get('pronouns', '') }}"></label>
+                    <label for="tracking_goal">What are you tracking?<select id="tracking_goal" name="tracking_goal"><option {% if user.get('tracking_goal', 'Understand my cycle') == 'Understand my cycle' %}selected{% endif %}>Understand my cycle</option><option {% if user.get('tracking_goal') == 'Prepare for my period' %}selected{% endif %}>Prepare for my period</option><option {% if user.get('tracking_goal') == 'Notice mood patterns' %}selected{% endif %}>Notice mood patterns</option><option {% if user.get('tracking_goal') == 'Support my wellbeing' %}selected{% endif %}>Support my wellbeing</option></select></label>
+                </div>
+                <label class="about-label" for="about">A little about you <span class="optional-label">optional</span><textarea id="about" name="about" maxlength="160" placeholder="A small note about what helps you feel supported...">{{ user.get('about', '') }}</textarea></label>
+                <label class="reminder-toggle"><input type="checkbox" name="reminder_enabled" {% if user.get('reminder_enabled') %}checked{% endif %}><span class="toggle-track"></span><span><strong>Gentle reminders</strong><small>Keep helpful cycle check-ins turned on</small></span></label>
                 <button class="login-button" type="submit">Save profile <span>→</span></button>
             </form>
             <a class="logout-link" href="{{ url_for('logout') }}">Log out of Mero Cycle</a>

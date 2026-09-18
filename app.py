@@ -180,6 +180,10 @@ def profile():
         country_code = request.form.get("country_code", "").strip()
         phone = request.form.get("phone", "").strip()
         dob = request.form.get("dob", "").strip()
+        pronouns = request.form.get("pronouns", "").strip()[:40]
+        tracking_goal = request.form.get("tracking_goal", "Understand my cycle").strip()
+        reminder_enabled = request.form.get("reminder_enabled") == "on"
+        about = request.form.get("about", "").strip()[:160]
         phone_digits = re.sub(r"\D", "", phone)
 
         try:
@@ -196,7 +200,7 @@ def profile():
         elif not birth_date or birth_date > date.today() or (date.today() - birth_date).days // 365 < 13:
             error = "Enter a valid date of birth for someone aged 13 or older."
         else:
-            updated_user = {"full_name": full_name, "country_code": country_code, "phone": phone_digits, "dob": dob}
+            updated_user = {"full_name": full_name, "country_code": country_code, "phone": phone_digits, "dob": dob, "pronouns": pronouns, "tracking_goal": tracking_goal, "reminder_enabled": reminder_enabled, "about": about}
             save_account(updated_user)
             session["registered_user"] = updated_user
             session["user"] = updated_user
