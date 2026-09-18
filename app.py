@@ -59,6 +59,9 @@ def home():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    if session.get("user"):
+        return redirect(url_for("dashboard"))
+
     error = None
 
     if request.method == "POST":
@@ -95,6 +98,9 @@ def register():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    if session.get("user"):
+        return redirect(url_for("dashboard"))
+
     error = None
     registered = request.args.get("registered") == "1"
     registered_user = session.get("registered_user")
