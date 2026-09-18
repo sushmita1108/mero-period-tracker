@@ -5,6 +5,8 @@ const languageSelect = document.querySelector('#chat-language');
 const voiceToggle = document.querySelector('#voice-toggle');
 const micButton = document.querySelector('#mic-button');
 const voiceStatus = document.querySelector('#voice-status');
+const newChatButton = document.querySelector('#new-chat');
+const clearChatButton = document.querySelector('#clear-chat');
 const dailyQuestion = document.querySelector('#daily-question');
 const dailyQuestionButton = document.querySelector('#daily-question-button');
 const chatStorageKey = 'mero-cycle-companion-chat';
@@ -73,6 +75,16 @@ function saveChat() {
 const savedMessages = JSON.parse(localStorage.getItem(chatStorageKey) || '[]');
 if (savedMessages.length) savedMessages.forEach((message) => addMessage(message.text, message.sender));
 else addMessage(`Hi ${firstName}! I am here for your daily check-in. ${todaysQuestion}`, 'companion');
+
+function startNewChat() {
+    chatMessages.replaceChildren();
+    localStorage.removeItem(chatStorageKey);
+    addMessage(`Hi ${firstName}! What would you like to talk about today?`, 'companion');
+    chatInput.focus();
+}
+
+newChatButton.addEventListener('click', startNewChat);
+clearChatButton.addEventListener('click', startNewChat);
 
 function sendMessage(text) {
     const cleanText = text.trim();
