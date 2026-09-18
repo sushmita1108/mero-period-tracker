@@ -1,10 +1,13 @@
 import re
+import json
 from datetime import date, datetime
+from pathlib import Path
 
 from flask import Flask, redirect, render_template, request, session, url_for
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "cycle-development-key"
+ACCOUNTS_FILE = Path(__file__).with_name("data") / "accounts.json"
 COUNTRY_OPTIONS = [
     ("🇦🇫", "Afghanistan", "+93"), ("🇦🇱", "Albania", "+355"), ("🇩🇿", "Algeria", "+213"), ("🇦🇩", "Andorra", "+376"), ("🇦🇴", "Angola", "+244"),
     ("🇦🇬", "Antigua and Barbuda", "+1"), ("🇦🇷", "Argentina", "+54"), ("🇦🇲", "Armenia", "+374"), ("🇦🇺", "Australia", "+61"), ("🇦🇹", "Austria", "+43"),
@@ -48,11 +51,27 @@ COUNTRY_OPTIONS = [
 ]
 COUNTRY_CODES = {code for _, _, code in COUNTRY_OPTIONS}
 
+
+def load_accounts():
+    if not ACCOUNTS_FILE.exists():
+        return {}
+    try:
+        return json.loads(ACCOUNTS_FILE.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return {}
+
+
+def save_account(user):
+    ACCOUNTS_FILE.parent.mkdir(exist_ok=True)
+    accounts = load_accounts()
+    accounts[f"{user['country_code']}:{user['phone']}"] = user
+    ACCOUNTS_FILE.write_text(json.dumps(accounts, indent=2), encoding="utf-8")
+
 @app.route("/")
 def home():
     if session.get("user"):
         return redirect(url_for("dashboard"))
-    if session.get("registered_user"):
+    if session.get("registered_user") or load_accounts():
         return redirect(url_for("login"))
     return redirect(url_for("register"))
 
@@ -90,6 +109,7 @@ def register():
                 error = "You must be at least 13 to use Cycle."
             else:
                 session["registered_user"] = {"full_name": full_name, "country_code": country_code, "phone": phone_digits, "dob": dob}
+                save_account(session["registered_user"])
                 session.pop("user", None)
                 return redirect(url_for("login", registered="1"))
 
@@ -105,7 +125,7 @@ def login():
     registered = request.args.get("registered") == "1"
     registered_user = session.get("registered_user")
 
-    if not registered_user:
+    if not registered_user and not load_accounts():
         return redirect(url_for("register"))
 
     if request.method == "POST":
@@ -113,11 +133,15 @@ def login():
         phone = request.form.get("phone", "").strip()
         phone_digits = re.sub(r"\D", "", phone)
 
-        registered_country_code = registered_user.get("country_code", "+1")
-        if country_code != registered_country_code or phone_digits != registered_user["phone"]:
+        accounts = load_accounts()
+        account = accounts.get(f"{country_code}:{phone_digits}")
+        if not account and registered_user and country_code == registered_user.get("country_code", "+1") and phone_digits == registered_user["phone"]:
+            account = registered_user
+        if not account:
             error = "Those details do not match your registration."
         else:
-            session["user"] = registered_user
+            session["user"] = account
+            session["registered_user"] = account
             return redirect(url_for("dashboard"))
 
     return render_template("login.html", error=error, registered=registered, country_options=COUNTRY_OPTIONS)
@@ -173,6 +197,7 @@ def profile():
             error = "Enter a valid date of birth for someone aged 13 or older."
         else:
             updated_user = {"full_name": full_name, "country_code": country_code, "phone": phone_digits, "dob": dob}
+            save_account(updated_user)
             session["registered_user"] = updated_user
             session["user"] = updated_user
             return redirect(url_for("profile", saved="1"))
