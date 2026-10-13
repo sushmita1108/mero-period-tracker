@@ -141,6 +141,8 @@ def register():
 @app.route("/check-phone")
 def check_phone():
     country_code = request.args.get("country_code", "").strip()
+    if country_code and not country_code.startswith("+"):
+        country_code = "+" + country_code
     phone = request.args.get("phone", "").strip()
     phone_digits = re.sub(r"\D", "", phone)
     account_key = f"{country_code}:{phone_digits}"
