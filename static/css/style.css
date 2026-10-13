@@ -3587,3 +3587,707 @@ button {
     font-size: 19px;
     transform: rotate(12deg);
 }
+
+/* ============================================================
+   FEMINIST THEME, STICKERS & SLOGANS (OVERVIEW SANCTUARY)
+   ============================================================ */
+
+.feminist-crown-sticker {
+    display: inline-block;
+    font-size: 22px;
+    vertical-align: middle;
+    animation: crownFloat 3s ease-in-out infinite alternate;
+}
+
+@keyframes crownFloat {
+    0% { transform: translateY(0) rotate(-4deg); }
+    100% { transform: translateY(-4px) rotate(4deg); }
+}
+
+.sticker-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    box-shadow: 0 4px 10px rgba(220, 53, 69, 0.2);
+    border: 2px solid #ffffff;
+    user-select: none;
+}
+
+.sticker-tag-bleed {
+    background: linear-gradient(135deg, #ff4d6d, #e63946);
+    color: #ffffff;
+    transform: rotate(-2deg);
+    animation: gentleBob 4s ease-in-out infinite alternate;
+}
+
+@keyframes gentleBob {
+    0% { transform: translateY(0) rotate(-2deg); }
+    100% { transform: translateY(-3px) rotate(1deg); }
+}
+
+/* Ribbon Ticker */
+.feminist-ribbon {
+    overflow: hidden;
+    background: linear-gradient(90deg, #ffeef2 0%, #fff7eb 50%, #f4edff 100%);
+    border-top: 1px solid #f7d2dc;
+    border-bottom: 1px solid #f7d2dc;
+    padding: 9px 0;
+    margin: 0 0 24px;
+    border-radius: 10px;
+    box-shadow: inset 0 1px 3px rgba(214, 51, 108, 0.06);
+}
+
+.ribbon-track {
+    display: flex;
+    gap: 28px;
+    white-space: nowrap;
+    animation: ribbonScroll 28s linear infinite;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    color: #9d3b5c;
+    text-transform: uppercase;
+}
+
+.ribbon-track span {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+@keyframes ribbonScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* Feminist Hero Card */
+.feminist-hero {
+    background: linear-gradient(135deg, #38243e 0%, #291b2e 60%, #46253c 100%) !important;
+    border: 1px solid #ff7b9f33 !important;
+    box-shadow: 0 18px 40px rgba(45, 27, 51, 0.35) !important;
+}
+
+.hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.sticker-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 11px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    color: #fff;
+    backdrop-filter: blur(4px);
+}
+
+.sticker-chip.gold {
+    background: rgba(255, 215, 0, 0.18);
+    border-color: rgba(255, 215, 0, 0.5);
+    color: #ffea79;
+}
+
+.hero-feminist-slogan {
+    margin: 14px 0 18px;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.08);
+    border-left: 3px solid #ff7597;
+    border-radius: 0 8px 8px 0;
+    font-size: 12px;
+    color: #fde8ef;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    line-height: 1.5;
+}
+
+.hero-feminist-slogan em {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 500;
+    color: #ffccd5;
+}
+
+.slogan-heart {
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.hero-action-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.hero-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    background: linear-gradient(135deg, #ff5c7a, #e63946);
+    color: #ffffff;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 11px;
+    box-shadow: 0 4px 14px rgba(230, 57, 70, 0.35);
+    transition: all 0.2s ease;
+}
+
+.hero-link-btn:hover {
+    background: linear-gradient(135deg, #e63946, #c92a2a);
+    transform: translateY(-1px);
+    text-decoration: none;
+    color: #fff;
+}
+
+.hero-link-btn.secondary {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: none;
+}
+
+.hero-link-btn.secondary:hover {
+    background: rgba(255, 255, 255, 0.22);
+}
+
+/* Feminist Stickers on Hero */
+.feminist-stickers {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.dashboard-sticker {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+    cursor: default;
+    user-select: none;
+    transition: transform 0.3s ease;
+}
+
+.dashboard-sticker:hover {
+    transform: scale(1.15) rotate(10deg);
+}
+
+.sticker-fist {
+    top: 22px;
+    right: 28px;
+    width: 38px;
+    height: 38px;
+    background: #ff758f;
+    font-size: 19px;
+    transform: rotate(12deg);
+}
+
+.sticker-venus {
+    top: 74px;
+    right: 320px;
+    width: 36px;
+    height: 36px;
+    background: #c77dff;
+    font-size: 18px;
+    transform: rotate(-10deg);
+}
+
+.sticker-bleed {
+    top: 140px;
+    right: 18px;
+    width: 36px;
+    height: 36px;
+    background: #ff4d6d;
+    font-size: 18px;
+    transform: rotate(8deg);
+}
+
+.sticker-crown {
+    top: 18px;
+    left: 480px;
+    width: 38px;
+    height: 38px;
+    background: #ffd166;
+    font-size: 19px;
+    transform: rotate(-6deg);
+}
+
+.sticker-sparkle-heart {
+    bottom: 22px;
+    right: 330px;
+    width: 34px;
+    height: 34px;
+    background: #ff85a1;
+    font-size: 17px;
+    transform: rotate(14deg);
+}
+
+.sticker-nails {
+    bottom: 20px;
+    right: 50px;
+    width: 36px;
+    height: 36px;
+    background: #f72585;
+    font-size: 18px;
+    transform: rotate(-12deg);
+}
+
+.sticker-flower {
+    top: 90px;
+    right: 22px;
+    width: 34px;
+    height: 34px;
+    background: #ffccd5;
+    font-size: 17px;
+    transform: rotate(6deg);
+}
+
+.sticker-moon {
+    top: 14px;
+    right: 220px;
+    width: 36px;
+    height: 36px;
+    background: #9d4edd;
+    font-size: 17px;
+    transform: rotate(-14deg);
+}
+
+/* Daily Feminist Slogan Card */
+.feminist-slogan-card {
+    background: linear-gradient(135deg, #fff7fa 0%, #fffdf8 100%);
+    border: 1px solid #f9d8e3;
+    border-radius: 14px;
+    padding: 26px 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 24px rgba(231, 132, 147, 0.12);
+    position: relative;
+    overflow: hidden;
+}
+
+.feminist-slogan-card::before {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(255, 182, 193, 0.25) 0%, transparent 70%);
+    top: -60px;
+    right: -40px;
+    pointer-events: none;
+}
+
+.slogan-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.slogan-card-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.slogan-icon {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #ffe3ec;
+    color: #d6336c;
+    font-size: 20px;
+    border: 1px solid #fcc2d7;
+}
+
+.slogan-card-title h2 {
+    margin: 4px 0 0;
+    font-size: 18px;
+    letter-spacing: -0.4px;
+    color: #492837;
+}
+
+.slogan-shuffle-button {
+    border: 0;
+    padding: 8px 16px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #ff6584, #f783ac);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 11px;
+    box-shadow: 0 4px 12px rgba(255, 101, 132, 0.3);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.slogan-shuffle-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 101, 132, 0.4);
+}
+
+.slogan-quote-mark {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 48px;
+    line-height: 1;
+    color: #f783ac;
+    opacity: 0.6;
+    display: block;
+    margin-bottom: -16px;
+}
+
+.slogan-quote-text {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 21px;
+    line-height: 1.4;
+    color: #3b1d2e;
+    margin: 0 0 10px;
+    font-style: italic;
+    font-weight: 500;
+    transition: opacity 0.2s ease;
+}
+
+.slogan-quote-subtext {
+    font-size: 12px;
+    color: #8c687b;
+    margin: 0 0 16px;
+    line-height: 1.6;
+}
+
+.slogan-sticker-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.sticker-pill {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 11px;
+    background: #ffffff;
+    border: 1px solid #f3d4e0;
+    border-radius: 12px;
+    color: #a63d64;
+    box-shadow: 0 2px 6px rgba(166, 61, 100, 0.08);
+}
+
+/* Interactive Sticker Wall */
+.sticker-wall-card {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 26px 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
+}
+
+.sticker-wall-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.sticker-wall-header h2 {
+    margin: 4px 0 0;
+    font-size: 18px;
+    color: #3b1d2e;
+}
+
+.sticker-wall-sub {
+    margin: 5px 0 0;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.sticker-wall-counter {
+    font-size: 11px;
+    font-weight: 700;
+    color: #d6336c;
+    background: #fff0f6;
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid #fcc2d7;
+}
+
+.sticker-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 13px;
+    margin-top: 20px;
+}
+
+.feminist-sticker-item {
+    border: 2px solid #ffffff;
+    border-radius: 13px;
+    padding: 15px 10px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    user-select: none;
+    outline: none;
+}
+
+.feminist-sticker-item:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.feminist-sticker-item:active,
+.feminist-sticker-item.popped {
+    transform: scale(0.95);
+}
+
+.sticker-emoji {
+    font-size: 26px;
+    display: block;
+    margin-bottom: 6px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+}
+
+.sticker-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #2b1522;
+    line-height: 1.25;
+}
+
+.sticker-tagline {
+    display: block;
+    font-size: 9px;
+    color: #7b586c;
+    margin-top: 3px;
+}
+
+/* Individual Sticker Color Themes */
+.sticker-red {
+    background: linear-gradient(135deg, #ffe3e8, #ffccd5);
+    border-color: #ff99aa;
+}
+
+.sticker-purple {
+    background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+    border-color: #d8b4fe;
+}
+
+.sticker-gold {
+    background: linear-gradient(135deg, #fffbeb, #fef3c7);
+    border-color: #fde68a;
+}
+
+.sticker-pink {
+    background: linear-gradient(135deg, #fff1f2, #ffe4e6);
+    border-color: #fecdd3;
+}
+
+.sticker-magenta {
+    background: linear-gradient(135deg, #fdf2f8, #fce7f3);
+    border-color: #fbcfe8;
+}
+
+.sticker-coral {
+    background: linear-gradient(135deg, #fff7ed, #ffedd5);
+    border-color: #fed7aa;
+}
+
+.sticker-lavender {
+    background: linear-gradient(135deg, #faf5ff, #f3e8ff);
+    border-color: #e9d5ff;
+}
+
+.sticker-teal {
+    background: linear-gradient(135deg, #f0fdfa, #ccfbf1);
+    border-color: #99f6e4;
+}
+
+.sticker-crimson {
+    background: linear-gradient(135deg, #fff1f2, #ffccd5);
+    border-color: #ff85a1;
+}
+
+.sticker-sunshine {
+    background: linear-gradient(135deg, #fefce8, #fef08a);
+    border-color: #fde047;
+}
+
+.sticker-rose {
+    background: linear-gradient(135deg, #fff0f3, #ffe3e8);
+    border-color: #ffb3c1;
+}
+
+.sticker-mint {
+    background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+    border-color: #bbf7d0;
+}
+
+/* Sticker Toast Notification */
+.sticker-toast {
+    margin-top: 16px;
+    padding: 13px 18px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #d6336c 0%, #e64980 100%);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 6px 18px rgba(214, 51, 108, 0.3);
+    animation: toastSlideUp 0.3s ease;
+}
+
+@keyframes toastSlideUp {
+    0% { opacity: 0; transform: translateY(8px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+.toast-sparkle {
+    font-size: 16px;
+    color: #ffd43b;
+}
+
+/* Feminist Phase Guide */
+.feminist-phase-guide {
+    margin-bottom: 24px;
+}
+
+.phase-sub {
+    margin: 5px 0 0;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.feminist-phase-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-top: 18px;
+}
+
+.feminist-phase-card {
+    padding: 18px 20px;
+    border-radius: 12px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+}
+
+.phase-sticker-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.phase-mini-badge {
+    font-size: 8px;
+    font-weight: 800;
+    text-transform: uppercase;
+    padding: 2px 5px;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.08);
+    color: #492837;
+}
+
+.phase-slogan {
+    display: block;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 11px;
+    color: #9d3b5c;
+    margin: 3px 0 6px;
+    font-style: italic;
+}
+
+/* Feminist Manifesto Pillars */
+.feminist-manifesto-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.manifesto-card {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 22px 20px;
+    position: relative;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+    transition: transform 0.2s ease;
+}
+
+.manifesto-card:hover {
+    transform: translateY(-2px);
+}
+
+.manifesto-sticker {
+    font-size: 28px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.manifesto-card h3 {
+    margin: 4px 0 6px;
+    font-size: 15px;
+    color: #3b1d2e;
+}
+
+.manifesto-slogan {
+    color: #c2255c;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 12px;
+    margin: 0 0 8px;
+    line-height: 1.4;
+}
+
+.manifesto-card p:not(.eyebrow):not(.manifesto-slogan) {
+    color: #7b6271;
+    font-size: 11px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Feminist Footer */
+.feminist-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+    padding-top: 24px;
+}
+
+.footer-stickers {
+    display: flex;
+    gap: 10px;
+    font-size: 18px;
+    margin-bottom: 4px;
+}
+
+@media (max-width: 900px) {
+    .feminist-phase-list {
+        grid-template-columns: 1fr;
+    }
+    .feminist-manifesto-grid {
+        grid-template-columns: 1fr;
+    }
+}
