@@ -21,8 +21,12 @@
             <p class="eyebrow">Create your account</p>
             <h2 id="register-heading">A little hello<br><em>to your future self.</em></h2>
             <p class="login-subtitle">Use your phone number and date of birth to begin your private cycle space.</p>
+            {% if request.args.get('existing') == '1' %}
+            <div class="form-success" role="status">This phone number is already registered. You don't need to register again. <a href="{{ url_for('login', existing='1') }}">Please log in here</a>.</div>
+            {% elif session.get('registered_user') and not session.get('user') %}
+            <div class="form-success" role="status">You already have an account ({{ session.registered_user.get('phone', '') }}). You don't need to register again. <a href="{{ url_for('login') }}">Log in here</a>.</div>
+            {% endif %}
             {% if error %}<div class="form-error" role="alert">{{ error }}</div>{% endif %}
-            {% if request.args.get('existing') == '1' %}<div class="form-success" role="status">This phone number is already registered. Please log in.</div>{% endif %}
             <form method="post" action="{{ url_for('register') }}" class="login-form">
                 <label for="full_name">Full name</label>
                 <div class="name-field"><input id="full_name" name="full_name" type="text" autocomplete="name" placeholder="e.g. Amelia Morgan" value="{{ request.form.get('full_name', '') }}" required></div>

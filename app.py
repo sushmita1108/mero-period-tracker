@@ -1,13 +1,14 @@
 import re
 import json
 import os
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 from flask import Flask, redirect, render_template, request, session, url_for
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "cycle-development-key")
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(days=365)
 ACCOUNTS_FILE = Path(__file__).with_name("data") / "accounts.json"
 COUNTRY_OPTIONS = [
     ("🇦🇫", "Afghanistan", "+93"), ("🇦🇱", "Albania", "+355"), ("🇩🇿", "Algeria", "+213"), ("🇦🇩", "Andorra", "+376"), ("🇦🇴", "Angola", "+244"),
@@ -102,10 +103,20 @@ def register():
             error = "Choose your country code."
         elif not re.fullmatch(r"[0-9\s().-]{7,20}", phone) or not 7 <= len(phone_digits) <= 15:
             error = "Enter a valid phone number."
-        elif load_accounts().get(f"{country_code}:{phone_digits}"):
-            session["registered_user"] = load_accounts()[f"{country_code}:{phone_digits}"]
-            return redirect(url_for("login", existing="1"))
         else:
+            accounts = load_accounts()
+            account_key = f"{country_code}:{phone_digits}"
+            existing_account = accounts.get(account_key)
+            if not existing_account and session.get("registered_user"):
+                reg_u = session["registered_user"]
+                if reg_u.get("country_code") == country_code and reg_u.get("phone") == phone_digits:
+                    existing_account = reg_u
+
+            if existing_account:
+                session.permanent = True
+                session["registered_user"] = existing_account
+                return redirect(url_for("login", existing="1"))
+
             try:
                 birth_date = datetime.strptime(dob, "%Y-%m-%d").date()
             except ValueError:
@@ -117,6 +128,7 @@ def register():
             elif (today - birth_date).days // 365 < 13:
                 error = "You must be at least 13 to use Cycle."
             else:
+                session.permanent = True
                 session["registered_user"] = {"full_name": full_name, "country_code": country_code, "phone": phone_digits, "dob": dob}
                 save_account(session["registered_user"])
                 session.pop("user", None)
@@ -132,6 +144,7 @@ def login():
 
     error = None
     registered = request.args.get("registered") == "1"
+    existing = request.args.get("existing") == "1"
     registered_user = session.get("registered_user")
 
     if not registered_user and not load_accounts():
@@ -144,16 +157,24 @@ def login():
 
         accounts = load_accounts()
         account = accounts.get(f"{country_code}:{phone_digits}")
-        if not account and registered_user and country_code == registered_user.get("country_code", "+1") and phone_digits == registered_user["phone"]:
+        if not account and registered_user and country_code == registered_user.get("country_code", "+1") and phone_digits == registered_user.get("phone"):
             account = registered_user
         if not account:
             error = "Those details do not match your registration."
         else:
+            session.permanent = True
             session["user"] = account
             session["registered_user"] = account
             return redirect(url_for("dashboard"))
 
-    return render_template("login.html", error=error, registered=registered, country_options=COUNTRY_OPTIONS)
+    return render_template(
+        "login.html",
+        error=error,
+        registered=registered,
+        existing=existing,
+        registered_user=registered_user,
+        country_options=COUNTRY_OPTIONS,
+    )
 
 
 @app.route("/dashboard")
@@ -229,6 +250,7 @@ def profile_edit():
         else:
             updated_user = {"full_name": full_name, "country_code": country_code, "phone": phone_digits, "dob": dob, "pronouns": pronouns, "tracking_goal": tracking_goal, "reminder_enabled": reminder_enabled, "about": about}
             save_account(updated_user)
+            session.permanent = True
             session["registered_user"] = updated_user
             session["user"] = updated_user
             return redirect(url_for("profile", saved="1"))
