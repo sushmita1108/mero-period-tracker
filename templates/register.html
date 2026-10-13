@@ -26,19 +26,60 @@
             {% elif session.get('registered_user') and not session.get('user') %}
             <div class="form-success" role="status">You already have an account ({{ session.registered_user.get('phone', '') }}). You don't need to register again. <a href="{{ url_for('login') }}">Log in here</a>.</div>
             {% endif %}
-            {% if error %}<div class="form-error" role="alert">{{ error }}</div>{% endif %}
-            <form method="post" action="{{ url_for('register') }}" class="login-form">
+            {% if error %}<div class="form-error" role="alert">{{ error | safe }}</div>{% endif %}
+            <form method="post" action="{{ url_for('register') }}" class="login-form" id="register-form">
                 <label for="full_name">Full name</label>
                 <div class="name-field"><input id="full_name" name="full_name" type="text" autocomplete="name" placeholder="e.g. Amelia Morgan" value="{{ request.form.get('full_name', '') }}" required></div>
                 <label for="phone">Phone number</label>
-                <div class="phone-field"><select id="country_code" name="country_code" aria-label="Country code" required>{% for flag, country, code in country_options %}<option value="{{ code }}" {% if request.form.get('country_code', '+1') == code %}selected{% endif %}>{{ flag }} {{ country }} {{ code }}</option>{% endfor %}</select><input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="555 123 4567" value="{{ request.form.get('phone', '') }}" required></div>
+                <div class="phone-field" id="phone-field-wrapper"><select id="country_code" name="country_code" aria-label="Country code" required>{% for flag, country, code in country_options %}<option value="{{ code }}" {% if request.form.get('country_code', '+1') == code %}selected{% endif %}>{{ flag }} {{ country }} {{ code }}</option>{% endfor %}</select><input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="555 123 4567" value="{{ request.form.get('phone', '') }}" required></div>
+                <div class="field-error" id="phone-registered-error" hidden>This phone number is already registered. <a href="{{ url_for('login') }}">Log in instead</a></div>
                 <label for="dob">Date of birth</label>
                 <div class="date-field"><input id="dob" name="dob" type="date" autocomplete="bday" value="{{ request.form.get('dob', '') }}" required></div>
-                <button class="login-button" type="submit">Create my account <span>→</span></button>
+                <button class="login-button" type="submit" id="submit-btn">Create my account <span>→</span></button>
             </form>
             <p class="switch-auth">Already registered? <a href="{{ url_for('login') }}">Log in</a></p>
             <p class="login-footnote">Your date of birth helps us keep your experience age-appropriate.</p>
         </section>
     </main>
+    <script>
+        const phoneInput = document.getElementById('phone');
+        const countryCodeSelect = document.getElementById('country_code');
+        const phoneWrapper = document.getElementById('phone-field-wrapper');
+        const phoneError = document.getElementById('phone-registered-error');
+        let checkTimeout = null;
+
+        function checkExistingPhone() {
+            clearTimeout(checkTimeout);
+            const phone = phoneInput.value.replace(/\D/g, '');
+            const code = countryCodeSelect.value;
+            if (phone.length < 7) {
+                if (phoneError) phoneError.hidden = true;
+                if (phoneWrapper) phoneWrapper.classList.remove('has-error');
+                return;
+            }
+            checkTimeout = setTimeout(() => {
+                fetch(`/check-phone?country_code=${encodeURIComponent(code)}&phone=${encodeURIComponent(phone)}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.registered) {
+                            if (phoneError) phoneError.hidden = false;
+                            if (phoneWrapper) phoneWrapper.classList.add('has-error');
+                        } else {
+                            if (phoneError) phoneError.hidden = true;
+                            if (phoneWrapper) phoneWrapper.classList.remove('has-error');
+                        }
+                    })
+                    .catch(() => {});
+            }, 300);
+        }
+
+        if (phoneInput && countryCodeSelect) {
+            phoneInput.addEventListener('input', checkExistingPhone);
+            countryCodeSelect.addEventListener('change', checkExistingPhone);
+            if (phoneInput.value.trim().length >= 7) {
+                checkExistingPhone();
+            }
+        }
+    </script>
 </body>
 </html>

@@ -115,7 +115,8 @@ def register():
             if existing_account:
                 session.permanent = True
                 session["registered_user"] = existing_account
-                return redirect(url_for("login", existing="1"))
+                error = 'This phone number is already registered. No new account can be created with this number. <a href="' + url_for('login') + '">Please log in here</a>.'
+                return render_template("register.html", error=error, country_options=COUNTRY_OPTIONS)
 
             try:
                 birth_date = datetime.strptime(dob, "%Y-%m-%d").date()
@@ -135,6 +136,21 @@ def register():
                 return redirect(url_for("login", registered="1"))
 
     return render_template("register.html", error=error, country_options=COUNTRY_OPTIONS)
+
+
+@app.route("/check-phone")
+def check_phone():
+    country_code = request.args.get("country_code", "").strip()
+    phone = request.args.get("phone", "").strip()
+    phone_digits = re.sub(r"\D", "", phone)
+    account_key = f"{country_code}:{phone_digits}"
+    accounts = load_accounts()
+    registered = account_key in accounts
+    if not registered and session.get("registered_user"):
+        reg_u = session["registered_user"]
+        if reg_u.get("country_code") == country_code and reg_u.get("phone") == phone_digits:
+            registered = True
+    return {"registered": registered}
 
 
 @app.route("/login", methods=["GET", "POST"])
