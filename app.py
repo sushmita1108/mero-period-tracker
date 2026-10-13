@@ -102,6 +102,9 @@ def register():
             error = "Choose your country code."
         elif not re.fullmatch(r"[0-9\s().-]{7,20}", phone) or not 7 <= len(phone_digits) <= 15:
             error = "Enter a valid phone number."
+        elif load_accounts().get(f"{country_code}:{phone_digits}"):
+            session["registered_user"] = load_accounts()[f"{country_code}:{phone_digits}"]
+            return redirect(url_for("login", existing="1"))
         else:
             try:
                 birth_date = datetime.strptime(dob, "%Y-%m-%d").date()

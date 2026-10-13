@@ -4,6 +4,7 @@ const chatInput = document.querySelector('#chat-input');
 const languageSelect = document.querySelector('#chat-language');
 const voiceToggle = document.querySelector('#voice-toggle');
 const micButton = document.querySelector('#mic-button');
+const voiceStatus = document.querySelector('#voice-status');
 const chatStorageKey = 'mero-cycle-companion-chat';
 let speakReplies = false;
 let selectedLanguage = localStorage.getItem('mero-cycle-language') || 'en-US';
@@ -97,8 +98,9 @@ else {
     const recognition = new SpeechRecognition();
     recognition.lang = selectedLanguage;
     recognition.interimResults = false;
-    micButton.addEventListener('click', () => { recognition.lang = selectedLanguage; micButton.classList.add('listening'); recognition.start(); });
-    recognition.addEventListener('result', (event) => { chatInput.value = event.results[0][0].transcript; chatInput.focus(); });
-    recognition.addEventListener('end', () => micButton.classList.remove('listening'));
+    micButton.addEventListener('click', () => { recognition.lang = selectedLanguage; micButton.classList.add('listening'); micButton.setAttribute('aria-label', 'Listening'); if (voiceStatus) voiceStatus.textContent = 'Listening... speak now'; recognition.start(); });
+    recognition.addEventListener('result', (event) => { const transcript = event.results[0][0].transcript; chatInput.value = transcript; if (voiceStatus) voiceStatus.textContent = 'Sending your voice message...'; sendMessage(transcript); chatInput.value = ''; });
+    recognition.addEventListener('error', () => { if (voiceStatus) voiceStatus.textContent = 'Microphone could not hear that. Please try again.'; });
+    recognition.addEventListener('end', () => { micButton.classList.remove('listening'); micButton.setAttribute('aria-label', 'Speak and send your message'); if (voiceStatus && voiceStatus.textContent === 'Listening... speak now') voiceStatus.textContent = 'Type a message or tap the microphone to speak.'; });
     languageSelect.addEventListener('change', () => { recognition.lang = languageSelect.value; });
 }
