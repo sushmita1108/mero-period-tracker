@@ -10,6 +10,7 @@ const cycleForm = document.querySelector('#cycle-form');
 const updateCycleButton = document.querySelector('#update-cycle');
 const closeCycleModal = document.querySelector('#close-cycle-modal');
 const lastPeriodInput = document.querySelector('#last-period');
+const lastMonthPeriodInput = document.querySelector('#last-month-period');
 const cycleLengthInput = document.querySelector('#cycle-length');
 const periodLengthInput = document.querySelector('#period-length');
 const cycleSaveStatus = document.querySelector('#cycle-save-status');
@@ -42,17 +43,42 @@ const parseDate = (value) => new Date(`${value}T00:00:00`);
 const addDays = (date, days) => new Date(date.getFullYear(), date.getMonth(), date.getDate() + days);
 const dateLabel = (date, withYear = false) => date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', ...(withYear ? { year: 'numeric' } : {}) });
 const savedCycle = JSON.parse(localStorage.getItem('cycle-settings') || 'null');
-const cycle = savedCycle || { lastPeriod: formatInputDate(addDays(today, -22)), cycleLength: 28, periodLength: 5 };
+const cycle = savedCycle || {
+	lastPeriod: formatInputDate(addDays(today, -22)),
+	lastMonthPeriod: formatInputDate(addDays(today, -50)),
+	cycleLength: 28,
+	periodLength: 5
+};
 
 lastPeriodInput.value = cycle.lastPeriod;
+if (lastMonthPeriodInput) {
+	lastMonthPeriodInput.value = cycle.lastMonthPeriod || formatInputDate(addDays(parseDate(cycle.lastPeriod), -Number(cycle.cycleLength || 28)));
+	lastMonthPeriodInput.addEventListener('change', () => {
+		if (lastPeriodInput.value && lastMonthPeriodInput.value) {
+			const diff = Math.round((parseDate(lastPeriodInput.value) - parseDate(lastMonthPeriodInput.value)) / 86400000);
+			if (diff >= 20 && diff <= 45) {
+				cycleLengthInput.value = diff;
+			}
+		}
+	});
+}
 cycleLengthInput.value = cycle.cycleLength;
 periodLengthInput.value = cycle.periodLength;
 
 function getCycleDates() {
 	const lastPeriod = parseDate(cycle.lastPeriod);
-	const nextPeriod = addDays(lastPeriod, Number(cycle.cycleLength));
+	const cycleLen = Number(cycle.cycleLength);
+	const lastMonthPeriod = cycle.lastMonthPeriod ? parseDate(cycle.lastMonthPeriod) : addDays(lastPeriod, -cycleLen);
+	const nextPeriod = addDays(lastPeriod, cycleLen);
 	const ovulation = addDays(nextPeriod, -14);
-	return { lastPeriod, nextPeriod, ovulation, fertileStart: addDays(ovulation, -5), fertileEnd: addDays(ovulation, 1) };
+	return {
+		lastPeriod,
+		lastMonthPeriod,
+		nextPeriod,
+		ovulation,
+		fertileStart: addDays(ovulation, -5),
+		fertileEnd: addDays(ovulation, 1)
+	};
 }
 
 function sameDate(first, second) {
@@ -71,6 +97,8 @@ function updateCycleSummary() {
 	document.querySelector('#next-period-date').textContent = dateLabel(dates.nextPeriod, true);
 	document.querySelector('#cycle-day').textContent = cycleDay;
 	document.querySelector('#cycle-orbit').setAttribute('aria-label', `Cycle day ${cycleDay} of ${cycle.cycleLength}`);
+	const timingLastMonth = document.querySelector('#timing-last-month');
+	if (timingLastMonth) timingLastMonth.textContent = dateLabel(dates.lastMonthPeriod, true);
 	document.querySelector('#timing-period').textContent = dateLabel(dates.nextPeriod, true);
 	document.querySelector('#timing-fertile').textContent = `${dateLabel(dates.fertileStart)} – ${dateLabel(dates.fertileEnd)}`;
 	document.querySelector('#timing-ovulation').textContent = dateLabel(dates.ovulation, true);
@@ -99,6 +127,42 @@ function updateOverviewInsights() {
 	}
 }
 
+function getDayStatus(currentDate) {
+	const periodLength = Number(cycle.periodLength || 5);
+	const cycleLength = Number(cycle.cycleLength || 28);
+	const baseDate = parseDate(cycle.lastPeriod || formatInputDate(addDays(today, -22)));
+
+	const periodStarts = new Set();
+	if (cycle.lastPeriod) periodStarts.add(cycle.lastPeriod);
+	if (cycle.lastMonthPeriod) periodStarts.add(cycle.lastMonthPeriod);
+	if (Array.isArray(cycle.periodDates)) {
+		cycle.periodDates.forEach((p) => periodStarts.add(p));
+	}
+
+	for (let k = -6; k <= 6; k += 1) {
+		periodStarts.add(formatInputDate(addDays(baseDate, k * cycleLength)));
+	}
+
+	for (const pStr of periodStarts) {
+		const pDate = parseDate(pStr);
+		if (currentDate >= pDate && currentDate < addDays(pDate, periodLength)) {
+			return { isPeriod: true, isFertile: false };
+		}
+	}
+
+	for (const pStr of periodStarts) {
+		const pDate = parseDate(pStr);
+		const ovulation = addDays(pDate, -14);
+		const fertileStart = addDays(ovulation, -5);
+		const fertileEnd = addDays(ovulation, 1);
+		if (currentDate >= fertileStart && currentDate <= fertileEnd) {
+			return { isPeriod: false, isFertile: true };
+		}
+	}
+
+	return { isPeriod: false, isFertile: false };
+}
+
 function renderCalendar() {
 	const year = displayedMonth.getFullYear();
 	const month = displayedMonth.getMonth();
@@ -117,14 +181,14 @@ function renderCalendar() {
 		calendarDays.appendChild(element);
 	}
 
-	const dates = getCycleDates();
 	for (let day = 1; day <= daysInMonth; day += 1) {
 		const element = document.createElement('span');
 		element.className = 'day';
 		element.textContent = day;
 		const currentDate = new Date(year, month, day);
-		if (currentDate >= dates.lastPeriod && currentDate < addDays(dates.lastPeriod, Number(cycle.periodLength))) element.classList.add('period');
-		if (currentDate >= dates.fertileStart && currentDate <= dates.fertileEnd) element.classList.add('fertile');
+		const status = getDayStatus(currentDate);
+		if (status.isPeriod) element.classList.add('period');
+		if (status.isFertile) element.classList.add('fertile');
 		if (sameDate(currentDate, today)) element.classList.add('today');
 		calendarDays.appendChild(element);
 	}
@@ -150,14 +214,29 @@ nextMonth.addEventListener('click', () => {
 	renderCalendar();
 });
 
-updateCycleButton.addEventListener('click', () => { cycleModal.hidden = false; lastPeriodInput.focus(); });
+updateCycleButton.addEventListener('click', () => {
+	cycleModal.hidden = false;
+	lastPeriodInput.value = cycle.lastPeriod;
+	if (lastMonthPeriodInput) {
+		lastMonthPeriodInput.value = cycle.lastMonthPeriod || formatInputDate(addDays(parseDate(cycle.lastPeriod), -Number(cycle.cycleLength || 28)));
+	}
+	lastPeriodInput.focus();
+});
 closeCycleModal.addEventListener('click', () => { cycleModal.hidden = true; });
 cycleModal.addEventListener('click', (event) => { if (event.target === cycleModal) cycleModal.hidden = true; });
 cycleForm.addEventListener('submit', (event) => {
 	event.preventDefault();
 	cycle.lastPeriod = lastPeriodInput.value;
+	if (lastMonthPeriodInput && lastMonthPeriodInput.value) {
+		cycle.lastMonthPeriod = lastMonthPeriodInput.value;
+	} else if (!cycle.lastMonthPeriod) {
+		cycle.lastMonthPeriod = formatInputDate(addDays(parseDate(cycle.lastPeriod), -Number(cycleLengthInput.value)));
+	}
 	cycle.cycleLength = Number(cycleLengthInput.value);
 	cycle.periodLength = Number(periodLengthInput.value);
+	if (!cycle.periodDates) cycle.periodDates = [];
+	if (!cycle.periodDates.includes(cycle.lastPeriod)) cycle.periodDates.push(cycle.lastPeriod);
+	if (cycle.lastMonthPeriod && !cycle.periodDates.includes(cycle.lastMonthPeriod)) cycle.periodDates.push(cycle.lastMonthPeriod);
 	localStorage.setItem('cycle-settings', JSON.stringify(cycle));
 	displayedMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 	renderCalendar();
